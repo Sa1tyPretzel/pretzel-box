@@ -7,7 +7,9 @@ import { PostHogProvider } from "./_providers/posthog-provider";
 export const metadata: Metadata = {
   title: "Pretzel Box",
   description: "shitty google drive",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export default function RootLayout({
