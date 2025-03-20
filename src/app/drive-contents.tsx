@@ -37,13 +37,23 @@ export default function DriveContents(props: {
               </div>
             ))}
           </div>
-          <div>
+          <div className="flex items-center space-x-4">
             <SignedOut>
               <SignInButton />
             </SignedOut>
             <SignedIn>
               <UserButton />
             </SignedIn>
+            <UploadButton
+              className="mt-5"
+              endpoint="driveUploader"
+              onClientUploadComplete={() => {
+                navigate.refresh();
+              }}
+              input={{
+                folderId: props.currentFolderId,
+              }}
+            />
           </div>
         </div>
         <div className="rounded-lg bg-gray-800 shadow-xl">
@@ -63,15 +73,6 @@ export default function DriveContents(props: {
             ))}
           </ul>
         </div>
-        <UploadButton
-          endpoint="driveUploader"
-          onClientUploadComplete={() => {
-            navigate.refresh();
-          }}
-          input={{
-            folderId: props.currentFolderId,
-          }}
-        />
       </div>
     </div>
   );
