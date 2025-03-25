@@ -8,14 +8,16 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
 import { useRouter } from "next/navigation";
 
+const DROPBOX_FOLDER_ID = 1125899906842628;
+
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
   folders: (typeof folders_table.$inferSelect)[];
   parents: (typeof folders_table.$inferSelect)[];
-
   currentFolderId: number;
 }) {
   const navigate = useRouter();
+  const isDropbox = props.currentFolderId === DROPBOX_FOLDER_ID;
 
   return (
     <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
@@ -25,7 +27,7 @@ export default function DriveContents(props: {
             <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
               My Drive
             </Link>
-            {props.parents.map((folder, index) => (
+            {props.parents.map((folder) => (
               <div key={folder.id} className="flex items-center">
                 <ChevronRight className="mx-2 text-gray-500" size={16} />
                 <Link
@@ -38,15 +40,19 @@ export default function DriveContents(props: {
             ))}
           </div>
           <div className="flex items-center space-x-4">
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+            {!isDropbox && (
+              <>
+                <SignedOut>
+                  <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </>
+            )}
             <UploadButton
               className="mt-5"
-              endpoint="driveUploader"
+              endpoint={isDropbox ? "dropboxUploader" : "driveUploader"}
               onClientUploadComplete={() => {
                 navigate.refresh();
               }}

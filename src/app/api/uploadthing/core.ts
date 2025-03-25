@@ -6,6 +6,8 @@ import { MUTATIONS, QUERIES } from "~/server/db/queries";
 
 const f = createUploadthing();
 
+const DROPBOX_FOLDER_ID = 1125899906842628;
+
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
@@ -38,6 +40,12 @@ export const ourFileRouter = {
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       if (!folder) throw new UploadThingError("Folder not found");
 
+      // Allow access if the owner is the current user or it's a public folder
+      const isOwnerOrPublic = folder.ownerId === user.userId || folder.ownerId === "0";
+      if (!isOwnerOrPublic) {
+        throw new Error("Unauthorized");
+      }
+
       if (folder.ownerId !== user.userId)
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw new UploadThingError("Unauthorized");
@@ -62,6 +70,41 @@ export const ourFileRouter = {
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
+    }),
+
+  // Dropbox Uploader (Public, No Auth)
+  dropboxUploader: f({
+    blob: {
+      maxFileSize: "256MB",
+      maxFileCount: 999,
+    },
+  })
+    .input(
+      z.object({
+        folderId: z.number(),
+      }),
+    )
+    .middleware(async ({ input }) => {
+      if (input.folderId !== DROPBOX_FOLDER_ID) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
+        throw new UploadThingError("Invalid Dropbox Folder ID");
+      }
+      return { parentId: input.folderId };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Public upload to Dropbox:", file.url);
+
+      await MUTATIONS.createFile({
+        file: {
+          name: file.name,
+          size: file.size,
+          url: file.url,
+          parent: metadata.parentId,
+        },
+        userId: "0",
+      });
+
+      return { uploadedBy: "Public" };
     }),
 } satisfies FileRouter;
 
