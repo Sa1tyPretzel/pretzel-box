@@ -9,29 +9,49 @@ export default function HomePage() {
         Pretzel Box
       </h1>
       <p className="mx-auto mb-8 max-w-md text-xl text-neutral-400 md:text-2xl">
-        Secure, fast, and easy file storage for the modern web
+        Fast and easy file storage with Personal Drive and Public Dropbox
       </p>
-      <form
-        action={async () => {
-          "use server";
 
-          const session = await auth();
+      <div className="flex gap-4 justify-center">
+        <form
+          action={async () => {
+            "use server";
 
-          if (!session.userId) {
-            return redirect("/sign-in");
-          }
+            const session = await auth();
 
-          return redirect("/drive");
-        }}
-      >
-        <Button
-          size="lg"
-          type="submit"
-          className="border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
+            if (!session.userId) {
+              return redirect("/sign-in");
+            }
+
+            return redirect("/drive");
+          }}
         >
-          Get Started
-        </Button>
-      </form>
+          <Button
+            size="lg"
+            type="submit"
+            className="border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
+          >
+            Get Started
+          </Button>
+        </form>
+
+        <form
+          action={async () => {
+            "use server";
+
+            return redirect("/f/1125899906842628");
+          }}
+        >
+          <Button
+            size="lg"
+            type="submit"
+            className="border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
+          >
+            Go to Dropbox
+          </Button>
+        </form>
+      </div>
+
       <footer className="mt-16 text-sm text-neutral-500">
         © {new Date().getFullYear()} Pretzel Box. All rights reserved.
       </footer>
