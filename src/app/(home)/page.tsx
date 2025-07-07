@@ -1,10 +1,22 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Button } from "~/components/ui/button";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
     <>
+      <div className="relative mx-auto mb-6 h-24 w-24">
+        <Image
+          src="/logo.png"
+          alt="Pretzel Box Logo"
+          fill
+          sizes="96px"
+          className="object-contain"
+          priority
+        />
+      </div>
+      
       <h1 className="mb-4 bg-gradient-to-r from-neutral-200 to-neutral-400 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">
         Pretzel Box
       </h1>
