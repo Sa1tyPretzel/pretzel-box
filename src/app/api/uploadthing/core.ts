@@ -75,7 +75,7 @@ export const ourFileRouter = {
   // Dropbox Uploader (Public, No Auth)
   dropboxUploader: f({
     blob: {
-      maxFileSize: "256MB",
+      maxFileSize: "512MB",
       maxFileCount: 999,
     },
   })
