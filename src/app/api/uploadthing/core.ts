@@ -17,7 +17,7 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: "512MB",
+      maxFileSize: undefined,
       maxFileCount: 999,
     },
   })
@@ -41,7 +41,8 @@ export const ourFileRouter = {
       if (!folder) throw new UploadThingError("Folder not found");
 
       // Allow access if the owner is the current user or it's a public folder
-      const isOwnerOrPublic = folder.ownerId === user.userId || folder.ownerId === "0";
+      const isOwnerOrPublic =
+        folder.ownerId === user.userId || folder.ownerId === "0";
       if (!isOwnerOrPublic) {
         throw new Error("Unauthorized");
       }
@@ -75,7 +76,7 @@ export const ourFileRouter = {
   // Dropbox Uploader (Public, No Auth)
   dropboxUploader: f({
     blob: {
-      maxFileSize: "512MB",
+      maxFileSize: undefined,
       maxFileCount: 999,
     },
   })
