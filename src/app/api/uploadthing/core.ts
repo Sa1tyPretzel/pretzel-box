@@ -17,7 +17,7 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: undefined,
+      maxFileSize: "2GB",
       maxFileCount: 999,
     },
   })
@@ -76,7 +76,7 @@ export const ourFileRouter = {
   // Dropbox Uploader (Public, No Auth)
   dropboxUploader: f({
     blob: {
-      maxFileSize: undefined,
+      maxFileSize: "2GB",
       maxFileCount: 999,
     },
   })
